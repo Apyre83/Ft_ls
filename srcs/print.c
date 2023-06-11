@@ -6,7 +6,7 @@
 /*   By: lfresnay <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 14:01:59 by lfresnay          #+#    #+#             */
-/*   Updated: 2023/06/10 17:17:21 by lfresnay         ###   ########.fr       */
+/*   Updated: 2023/06/11 09:14:15 by lfresnay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ int	getDirs(t_dir *dirs, t_args *args, char *actualPath, char *(*recursive_dirs)
 		{
 			char	*tmpPath = ft_strjoin(actualPath, "/");
 			(*recursive_dirs)[i++] = ft_strjoin(tmpPath, tmp->name);
+			free(tmpPath);
 		}
 		tmp = tmp->next;
 	}
@@ -150,7 +151,7 @@ void ft_print_content(t_dir *dirs, t_args *args, char *actualPath, int isFiles)
 		tmp = tmp->next;
 	}
 	if (isFiles == 1)
-		ft_printf("yo\n");
+		ft_printf("\n");
 
 	if (nbFiles > 0 || i > 0)
 		ft_printf("\n");
