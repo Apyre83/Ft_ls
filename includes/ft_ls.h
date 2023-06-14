@@ -6,7 +6,7 @@
 /*   By: lfresnay <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 14:02:20 by lfresnay          #+#    #+#             */
-/*   Updated: 2023/06/10 15:57:08 by lfresnay         ###   ########.fr       */
+/*   Updated: 2023/06/14 10:00:42 by lfresnay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <pwd.h>
 # include <grp.h>
 # include <time.h>
+# include <string.h>
 
 typedef struct	s_args
 {

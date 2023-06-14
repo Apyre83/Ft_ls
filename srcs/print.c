@@ -6,7 +6,7 @@
 /*   By: lfresnay <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 14:01:59 by lfresnay          #+#    #+#             */
-/*   Updated: 2023/06/11 09:14:15 by lfresnay         ###   ########.fr       */
+/*   Updated: 2023/06/14 10:10:45 by lfresnay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 void print_file_permissions(struct stat file_stat)
 {
-	ft_printf((S_ISDIR(file_stat.st_mode)) ? "d" : "-");
+	if (S_ISLNK(file_stat.st_mode))
+		ft_printf("l");
+	else if (S_ISDIR(file_stat.st_mode))
+		ft_printf("d");
+	else
+		ft_printf("-");
 	ft_printf((file_stat.st_mode & S_IRUSR) ? "r" : "-");
 	ft_printf((file_stat.st_mode & S_IWUSR) ? "w" : "-");
 	ft_printf((file_stat.st_mode & S_IXUSR) ? "x" : "-");
@@ -70,7 +75,7 @@ int ft_size_content(t_dir *dirs, t_args *args)
 	return (i);
 }
 
-void	ft_print_file(t_dir *tmp, t_args *args, int *nbFiles)
+void	ft_print_file(t_dir *tmp, t_args *args, int *nbFiles, char *actualPath)
 {
 	if (args->l == 1 && args->a == 1)
 	{
@@ -81,6 +86,17 @@ void	ft_print_file(t_dir *tmp, t_args *args, int *nbFiles)
 		ft_printf("%10d ", tmp->stats.st_size);
 		print_time(tmp->stats);
 		ft_printf("%s", tmp->name);
+		if (S_ISLNK(tmp->stats.st_mode))
+		{
+			char buf[1024];
+			int len;
+
+			if ((len = readlink(tmp->name, buf, sizeof(buf) - 1)) != -1)
+			{
+				buf[len] = '\0';
+				ft_printf(" -> %s", buf);
+			}
+		}
 		(*nbFiles)++;
 	}
 	else if (args->l == 1 && tmp->name[0] != '.')
@@ -92,6 +108,21 @@ void	ft_print_file(t_dir *tmp, t_args *args, int *nbFiles)
 		ft_printf("%10d ", tmp->stats.st_size);
 		print_time(tmp->stats);
 		ft_printf("%s", tmp->name);
+		if (S_ISLNK(tmp->stats.st_mode))
+		{
+			char buf[1024];
+			int len;
+
+			char	*temp = ft_strjoin(actualPath, "/");
+			char	*path = ft_strjoin(temp, tmp->name);
+			free(temp);
+			if ((len = readlink(path, buf, sizeof(buf) - 1)) != -1)
+			{
+				buf[len] = '\0';
+				ft_printf(" -> %s", buf);
+			}
+			free(path);
+		}
 		(*nbFiles)++;
 	}
 	if (args->a == 1 && args->l == 0)
@@ -147,7 +178,7 @@ void ft_print_content(t_dir *dirs, t_args *args, char *actualPath, int isFiles)
 		ft_printf("total %d\n", ft_size_content(dirs, args));
 	while (tmp)
 	{
-		ft_print_file(tmp, args, &nbFiles);
+		ft_print_file(tmp, args, &nbFiles, actualPath);
 		tmp = tmp->next;
 	}
 	if (isFiles == 1)

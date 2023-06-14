@@ -6,7 +6,7 @@
 /*   By: lfresnay <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 14:02:07 by lfresnay          #+#    #+#             */
-/*   Updated: 2023/06/10 16:55:44 by lfresnay         ###   ########.fr       */
+/*   Updated: 2023/06/14 09:56:57 by lfresnay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	list_files(char *dir_name, t_args *args, int hasNext)
 		tmp = ft_strjoin(dir_name, "/");
 		path = ft_strjoin(tmp, new_node->name);
 		free(tmp);
-		stat(path, &(new_node->stats));
+		lstat(path, &(new_node->stats));
 		free(path);
 		new_node->next = cwd_content;
 		cwd_content = new_node;
