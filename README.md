@@ -15,7 +15,7 @@
 To install `ft_ls`, clone this repository and compile the source files using Make:
 
 ```bash
-git clone https://github.com/yourusername/ft_ls.git
+git clone https://github.com/Apyre83/Ft_ls.git
 cd ft_ls
 make
 ```
